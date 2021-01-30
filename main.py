@@ -2,11 +2,11 @@ from game import Game
 
 if __name__ == '__main__':
     game = Game()
-    exit = False
+    game_exit = False
 
-    while(not exit):
+    while not game_exit:
         print('*** Game-Options ***')
-        if (game.selected_quiz):
+        if game.selected_quiz:
             print('(1). play Quiz "' + game.selected_quiz.title + '"')
         print('(2). select Quiz')
         print('(3). create Quiz')
@@ -22,6 +22,6 @@ if __name__ == '__main__':
         if task == '4':
             game.create_question()
         elif task == '5':
-            exit = True
+            game_exit = True
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

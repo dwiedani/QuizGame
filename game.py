@@ -3,19 +3,19 @@ from data.data import Data
 from g_objects.question import Question
 from copy import deepcopy
 
-class Game:
 
+class Game:
     selected_quiz = None
     data = Data()
 
     def play_quiz(self):
         self.data.load_quiz_data()
-        if (self.selected_quiz):
+        if self.selected_quiz:
             current_quiz = deepcopy(self.selected_quiz)
             current_quiz.title += 'copy'
             print('*** Now playing:' + current_quiz.title + ' ***')
-            while (current_quiz.has_question()):
-                if (current_quiz.do_question()):
+            while current_quiz.has_question():
+                if current_quiz.do_question():
                     print('correct!')
                 else:
                     print('incorrect!')
@@ -37,13 +37,13 @@ class Game:
         self.data.print_quiz_list()
         title = input()
         self.selected_quiz = self.data.get_quiz(title)
-        if (self.selected_quiz):
+        if self.selected_quiz:
             print('(!) Quiz "' + self.selected_quiz.title + '" loaded')
         else:
             print('(!) Quiz "' + title + '" not found')
 
     def create_question(self):
-        if (self.selected_quiz):
+        if self.selected_quiz:
             question = Question()
             self.selected_quiz.add_question(question.build())
             self.data.save_quiz_data()

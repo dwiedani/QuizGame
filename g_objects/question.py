@@ -1,5 +1,6 @@
 import random
 
+
 class Question:
     text = ''
     correct_answer = ''
@@ -12,7 +13,7 @@ class Question:
         correct_answer = input()
         print('How many incorrect answers would you like to add?')
         amount = 100
-        while(amount > 3 or amount < 1):
+        while amount > 3 or amount < 1:
             amount = int(input())
         incorrect_answers = []
         for i in range(amount):
@@ -40,11 +41,11 @@ class Question:
             index += 1
 
         answer_input = 100
-        while(answer_input >= len(answers)):
+        while answer_input >= len(answers):
             answer_input = int(input())
         return self.validate(answers[answer_input])
 
     def validate(self, answer):
-        if (answer == self.correct_answer):
+        if answer == self.correct_answer:
             return True
         return False

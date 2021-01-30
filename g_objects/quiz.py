@@ -1,5 +1,6 @@
 import random
 
+
 class Quiz:
     questions = []
 
@@ -9,11 +10,10 @@ class Quiz:
 
     def run(self):
         while self.has_question():
-            if (self.do_question()):
+            if self.do_question():
                 print('correct!')
             else:
                 print('incorrect!')
-
 
     def add_question(self, question):
         self.questions.append(question)
@@ -26,6 +26,6 @@ class Quiz:
             return question.ask()
 
     def has_question(self):
-        if (len(self.questions) != 0):
+        if len(self.questions) != 0:
             return True
         return False

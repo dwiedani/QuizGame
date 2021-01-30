@@ -3,6 +3,7 @@ import os.path
 from g_objects.quiz import Quiz
 from g_objects.question import Question
 
+
 class Data:
     quiz_list = []
 
@@ -11,7 +12,7 @@ class Data:
 
     def set_quiz(self, new_quiz):
         for quiz in self.quiz_list:
-            if(new_quiz.title == quiz.title):
+            if new_quiz.title == quiz.title:
                 return quiz
         self.quiz_list.append(new_quiz)
         self.save_quiz_data()
@@ -20,7 +21,7 @@ class Data:
 
     def get_quiz(self, title):
         for quiz in self.quiz_list:
-            if(quiz.title == title):
+            if quiz.title == title:
                 return quiz
         return False
 
@@ -49,14 +50,11 @@ class Data:
     def save_quiz_data(self):
         quiz_data = []
         for quiz_item in self.quiz_list:
-            quiz = {}
-            quiz['title'] = quiz_item.title
+            quiz = {'title': quiz_item.title}
             question_data = []
             for question_item in quiz_item.questions:
-                question = {}
-                question['text'] = question_item.text
-                question['correct_answer'] = question_item.correct_answer
-                question['incorrect_answers'] = question_item.incorrect_answers
+                question = {'text': question_item.text, 'correct_answer': question_item.correct_answer,
+                            'incorrect_answers': question_item.incorrect_answers}
                 question_data.append(question)
             quiz['questions'] = json.dumps(question_data)
             quiz_data.append(quiz)
