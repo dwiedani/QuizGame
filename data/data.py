@@ -1,7 +1,7 @@
 import json
 import os.path
-from quiz import Quiz
-from question import Question
+from g_objects.quiz import Quiz
+from g_objects.question import Question
 
 class Data:
     quiz_list = []
@@ -30,8 +30,8 @@ class Data:
 
     def load_quiz_data(self):
         self.quiz_list = []
-        if os.path.isfile('data.txt'):
-            with open('data.txt') as json_file:
+        if os.path.isfile('./data/data.txt'):
+            with open('./data/data.txt') as json_file:
                 json_str = json.load(json_file)
                 data = json.loads(json_str)
                 for quiz in data:
@@ -61,6 +61,5 @@ class Data:
             quiz['questions'] = json.dumps(question_data)
             quiz_data.append(quiz)
         data = json.dumps(quiz_data)
-        print(data)
-        with open('data.txt', 'w') as outfile:
+        with open('./data/data.txt', 'w') as outfile:
             json.dump(data, outfile)

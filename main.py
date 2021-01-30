@@ -6,7 +6,8 @@ if __name__ == '__main__':
 
     while(not exit):
         print('*** Game-Options ***')
-        print('(1). play Quiz')
+        if (game.selected_quiz):
+            print('(1). play Quiz "' + game.selected_quiz.title + '"')
         print('(2). select Quiz')
         print('(3). create Quiz')
         print('(4). create Question / add to Quiz')
