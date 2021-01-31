@@ -22,7 +22,6 @@ class Quiz:
         if self.has_question():
             random.shuffle(self.questions)
             question = self.questions.pop()
-            print(question.text)
             return question.ask()
 
     def has_question(self):

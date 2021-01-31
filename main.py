@@ -1,5 +1,6 @@
 from game import Game
 
+
 if __name__ == '__main__':
     game = Game()
     game_exit = False
@@ -11,7 +12,7 @@ if __name__ == '__main__':
         print('(2). select Quiz')
         print('(3). create Quiz')
         print('(4). create Question / add to Quiz')
-        print('(5). exit')
+        print('(0). exit')
         task = input()
         if task == '1':
             game.play_quiz()
@@ -21,7 +22,7 @@ if __name__ == '__main__':
             game.create_quiz()
         if task == '4':
             game.create_question()
-        elif task == '5':
+        elif task == '0':
             game_exit = True
 
 # See PyCharm help at https://www.jetbrains.com/help/pycharm/

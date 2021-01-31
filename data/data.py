@@ -1,7 +1,7 @@
 import json
 import os.path
 from g_objects.quiz import Quiz
-from g_objects.question import Question
+import question_factory as question_factory
 
 
 class Data:
@@ -39,11 +39,7 @@ class Data:
                     quiz_object = Quiz(quiz['title'])
                     questions = json.loads(quiz['questions'])
                     for question in questions:
-                        question_object = Question()
-                        question_object.set(
-                            question['text'],
-                            question['correct_answer'],
-                            question['incorrect_answers'])
+                        question_object = question_factory.create_from_json(question)
                         quiz_object.questions.append(question_object)
                     self.quiz_list.append(quiz_object)
 
@@ -53,9 +49,7 @@ class Data:
             quiz = {'title': quiz_item.title}
             question_data = []
             for question_item in quiz_item.questions:
-                question = {'text': question_item.text, 'correct_answer': question_item.correct_answer,
-                            'incorrect_answers': question_item.incorrect_answers}
-                question_data.append(question)
+                question_data.append(json.dumps(question_item.__dict__))
             quiz['questions'] = json.dumps(question_data)
             quiz_data.append(quiz)
         data = json.dumps(quiz_data)

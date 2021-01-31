@@ -1,22 +1,20 @@
+from .question import Question
+import re
 
 
-class Question:
-    text = ''
-    correct_answer = None
+class QuestionNum(Question):
 
     def __init__(self, text, correct_answer):
-        self.text = text
+        super().__init__(text, correct_answer)
         self.correct_answer = correct_answer
 
     def ask(self):
         print(self.text)
         answer_input = input()
+        while not re.match(r'^[ 0-9]+$', answer_input):
+            answer_input = input()
+        answer_input = int(answer_input)
         return self.validate(answer_input)
-
-    def validate(self, answer):
-        if answer == self.correct_answer:
-            return True
-        return False
 
     class Builder:
         text = ''
@@ -31,4 +29,4 @@ class Question:
             return self
 
         def build(self):
-            return Question(self.text, self.correct_answer)
+            return QuestionNum(self.text, self.correct_answer)
