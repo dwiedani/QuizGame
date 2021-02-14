@@ -4,20 +4,10 @@ import uuid
 class Quiz:
     questions = []
 
-    def __init__(self, title, id=None):
-        if id == None:
-            self.id = str(uuid.uuid4())
-        else:
-            self.id = id
+    def __init__(self, title, id=str(uuid.uuid4())):
+        self.id = id
         self.title = title
         self.questions = []
-
-    def run(self):
-        while self.has_question():
-            if self.do_question():
-                print('correct!')
-            else:
-                print('incorrect!')
 
     def add_question(self, question):
         self.questions.append(question)

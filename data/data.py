@@ -1,6 +1,7 @@
 import json
 import os.path
 from g_objects.quiz import Quiz
+from g_objects.user import User
 import question_factory as question_factory
 
 
@@ -77,3 +78,53 @@ class Data:
         with file as outfile:
             json.dump(data, outfile)
         file.close()
+
+    def load_user_data(self):
+        user_repository = []
+        if os.path.isfile('./data/users.json'):
+            file = open('./data/users.json')
+            with file as json_file:
+                json_str = json.load(json_file)
+                data = json.loads(json_str)
+                for user in data:
+                    user_object = User(**user)
+                    user_repository.append(user_object)
+            file.close()
+        return user_repository
+
+    def save_user(self, new_user):
+        user_data = []
+        user_repository = self.load_user_data()
+        updated = False
+
+        for i in range(len(user_repository)):
+            if user_repository[i].id == new_user.id:
+                user_repository[i] = new_user
+                updated = True
+
+        if updated == False:
+            user_repository.append(new_user)
+
+        for user_item in user_repository:
+            user = user_item.__dict__
+            user_data.append(user)
+        data = json.dumps(user_data)
+        file = open('./data/users.json', 'w')
+        with file as outfile:
+            json.dump(data, outfile)
+        file.close()
+
+    def get_user_by_username(self, username):
+        users = self.load_user_data()
+        for user in users:
+            if user.username == username:
+                return user
+        return False
+
+    def create_user(self, username, password):
+        if not self.get_user_by_username(username):
+            user = User(username, password)
+            self.save_user(user)
+            print('user with username: "' + username + '" created!')
+        else:
+            print('user with username: "' + username + '" already exists!')
