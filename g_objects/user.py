@@ -1,4 +1,6 @@
 import uuid
+
+
 class User:
 
     def __init__(self, username, password, id=str(uuid.uuid4()), played=0, questions=0, correct_answers=0):

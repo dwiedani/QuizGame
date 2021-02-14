@@ -7,7 +7,8 @@ import json
 
 def create_selection_question(text, correct_answer, incorrect_answers):
     builder = QuestionSelect.Builder()
-    return builder.question_type(QuestionType.SELECT).text(text).correct_answer(correct_answer).incorrect_answers(incorrect_answers).build()
+    return builder.question_type(QuestionType.SELECT).text(text).correct_answer(correct_answer).incorrect_answers(
+        incorrect_answers).build()
 
 
 def create_exact_question(text, correct_answer):
@@ -18,6 +19,7 @@ def create_exact_question(text, correct_answer):
 def create_numeric_question(text, correct_answer):
     builder = QuestionNum.Builder()
     return builder.question_type(QuestionType.NUM).text(text).correct_answer(correct_answer).build()
+
 
 def create_from_json(question_data):
     question_data = json.loads(question_data)

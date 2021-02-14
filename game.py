@@ -4,6 +4,22 @@ import question_factory as question_factory
 import re
 
 
+def number_input_filter(message):
+    input_str = input(message)
+    while not re.match(r'^[ 0-9]+$', input_str):
+        print('(!) only numbers allowed')
+        input_str = input(message)
+    return int(input_str)
+
+
+def letter_input_filter(message):
+    input_str = input(message)
+    while not re.match(r'^[a-zA-Z]+$', input_str):
+        print('(!) only letters allowed')
+        input_str = input(message)
+    return input_str
+
+
 class Game:
     selected_quiz = None
     data = Data()
@@ -18,13 +34,12 @@ class Game:
                     print('correct!')
                     if self.current_user:
                         self.current_user.correct_answer()
-                        self.current_user.question()
                         self.data.save_user(self.current_user)
                 else:
                     print('incorrect!')
-                    if self.current_user:
-                        self.current_user.question()
-                        self.data.save_user(self.current_user)
+                if self.current_user:
+                    self.current_user.question()
+                    self.data.save_user(self.current_user)
             if self.current_user:
                 self.current_user.quiz_played()
                 self.data.save_user(self.current_user)
@@ -36,12 +51,12 @@ class Game:
         print('Type Quiz title:')
         title = input()
         quiz = Quiz(title)
-        self.data.create_quiz(quiz)
+        self.data.save_quiz(quiz)
         self.selected_quiz = quiz.id
         print('(!) The Quiz: "' + self.data.get_quiz_by_id(
             self.selected_quiz).title + '" has been created and selected')
 
-        question_count = self.number_input_filter('how many question would you like to add? (3-10):')
+        question_count = number_input_filter('how many question would you like to add? (3-10):')
 
         if question_count > 10:
             question_count = 10
@@ -57,34 +72,32 @@ class Game:
         print('Select a Quiz:')
         self.print_quiz_list()
         title = input()
-        quizes = self.data.get_quiz_by_title(title)
+        quizzes = self.data.get_quiz_by_title(title)
+        index = 0
 
-        if len(quizes) == 0:
+        if len(quizzes) == 0:
             print('(!) Quiz "' + title + '" not found')
             return
 
-        if len(quizes) == 1:
-            index = 0
-
-        elif len(quizes) > 1:
-            print('(!) Multiple quizes with title:"' + quizes[0].title + '" found')
-            self.print_quiz_list_indexed(quizes)
-            index = self.number_input_filter('select a quiz: ')
-
-        self.selected_quiz = quizes[index].id
-        if self.selected_quiz:
-            print('(!) Quiz "' + quizes[index].title + '" loaded')
+        elif len(quizzes) > 1:
+            print('(!) Multiple quizzes with title:"' + quizzes[0].title + '" found')
+            self.print_quiz_list_indexed(quizzes)
+            index = number_input_filter('select a quiz: ')
+        if 0 <= index < len(quizzes):
+            self.selected_quiz = quizzes[index].id
+            if self.selected_quiz:
+                print('(!) Quiz "' + quizzes[index].title + '" loaded')
         return
 
     def print_quiz_list(self, quiz_data=None):
         if not quiz_data:
-            quiz_data = self.data.load_quiz_data()
+            quiz_data = self.data.get_all_quizes()
         for quiz in quiz_data:
             print('(' + quiz.title + ') questions:' + str(len(quiz.questions)))
 
     def print_quiz_list_indexed(self, quiz_data=None):
         if not quiz_data:
-            quiz_data = self.data.load_quiz_data()
+            quiz_data = self.data.get_all_quizes()
         index = 0
         for quiz in quiz_data:
             print('(' + str(index) + ')' + quiz.title + ' questions: ' + str(len(quiz.questions)))
@@ -112,7 +125,7 @@ class Game:
 
             if question_type == '2':
                 text = input('Enter question text: ')
-                correct_answer = self.number_input_filter('Enter correct answer: ')
+                correct_answer = number_input_filter('Enter correct answer: ')
                 question = question_factory.create_numeric_question(text, correct_answer)
 
             if question_type == '3':
@@ -121,7 +134,7 @@ class Game:
 
                 amount = 0
                 while amount > 3 or amount < 1:
-                    amount = self.number_input_filter('How many incorrect answers would you like to add?')
+                    amount = number_input_filter('How many incorrect answers would you like to add?')
 
                 incorrect_answers = []
 
@@ -137,24 +150,10 @@ class Game:
             print('(!) No Quiz selected')
         return
 
-    def number_input_filter(self, message):
-        input_str = input(message)
-        while not re.match(r'^[ 0-9]+$', input_str):
-            print('(!) only numbers allowed')
-            input_str = input(message)
-        return int(input_str)
-
-    def letter_input_filter(self, message):
-        input_str = input(message)
-        while not re.match(r'^[a-zA-Z]+$', input_str):
-            print('(!) only letters allowed')
-            input_str = input(message)
-        return input_str
-
     def show_user_statistics(self):
         if self.current_user:
             stats = self.current_user.stats()
-            print('Played Quizes: ' + str(stats['played']))
+            print('Played quizzes: ' + str(stats['played']))
             print('Answered Questions: ' + str(stats['questions']))
             print('Correct Answers: ' + str(stats['correct_answers']))
 
@@ -168,13 +167,12 @@ class Game:
         else:
             print('(!) username and/or password are incorrect')
 
-
     def register(self):
         print('*** User-registration ***')
-        username = self.letter_input_filter('username:')
+        username = letter_input_filter('username:')
         password = input('password:')
         re_password = input('confirm password:')
         if password == re_password:
-            self.data.create_user(username,password)
+            self.data.create_user(username, password)
         else:
             print('(!) your passwords are not equal')
