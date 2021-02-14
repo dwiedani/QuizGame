@@ -26,12 +26,11 @@ class Game:
         print('Type Quiz title:')
         title = input()
         quiz = Quiz(title)
-        self.data.set_quiz(quiz)
+        self.data.create_quiz(quiz)
         self.selected_quiz = quiz.id
         print('(!) The Quiz: "' + self.data.get_quiz_by_id(self.selected_quiz).title + '" has been created and selected')
 
     def select_quiz(self):
-        self.data.load_quiz_data()
         print('Select a Quiz:')
         self.data.print_quiz_list()
         title = input()
@@ -45,7 +44,6 @@ class Game:
 
     def create_question(self):
         if self.selected_quiz:
-            self.data.load_quiz_data()
             print('What type of Question?')
             print('(1). Exact String')
             print('(2). Exact Number')
@@ -87,7 +85,8 @@ class Game:
 
                 question = question_factory.create_selection_question(text, correct_answer, incorrect_answers)
 
-            self.data.get_quiz_by_id(self.selected_quiz).add_question(question)
-            self.data.save_quiz_data()
+            quiz = self.data.get_quiz_by_id(self.selected_quiz)
+            quiz.add_question(question)
+            self.data.save_quiz(quiz)
         else:
             print('(!) No Quiz selected')

@@ -12,6 +12,8 @@ if __name__ == '__main__':
         print('(2). select Quiz')
         print('(3). create Quiz')
         print('(4). create Question / add to Quiz')
+        print('(5). register')
+        print('(6). login')
         print('(0). exit')
         task = input()
         if task == '1':
@@ -21,6 +23,10 @@ if __name__ == '__main__':
         if task == '3':
             game.create_quiz()
         if task == '4':
+            game.create_question()
+        if task == '5':
+            game.create_question()
+        if task == '6':
             game.create_question()
         elif task == '0':
             game_exit = True
