@@ -10,9 +10,8 @@ class Game:
     data = Data()
 
     def play_quiz(self):
-        self.data.load_quiz_data()
         if self.selected_quiz:
-            current_quiz = deepcopy(self.selected_quiz)
+            current_quiz = self.data.get_quiz_by_id(self.selected_quiz)
             print('*** Now playing:' + current_quiz.title + ' ***')
             while current_quiz.has_question():
                 if current_quiz.do_question():
@@ -28,23 +27,25 @@ class Game:
         title = input()
         quiz = Quiz(title)
         self.data.set_quiz(quiz)
-        self.selected_quiz = quiz
-        print('(!) The Quiz: "' + self.selected_quiz.title + '" has been created and selected')
+        self.selected_quiz = quiz.id
+        print('(!) The Quiz: "' + self.data.get_quiz_by_id(self.selected_quiz).title + '" has been created and selected')
 
     def select_quiz(self):
         self.data.load_quiz_data()
         print('Select a Quiz:')
         self.data.print_quiz_list()
         title = input()
-        self.selected_quiz = self.data.get_quiz(title)
-        if self.selected_quiz:
-            print('(!) Quiz "' + self.selected_quiz.title + '" loaded')
+        quiz = self.data.get_quiz_by_title(title)
+        if quiz:
+            self.selected_quiz = quiz.id
+            if self.selected_quiz:
+                print('(!) Quiz "' + quiz.title + '" loaded')
         else:
             print('(!) Quiz "' + title + '" not found')
 
     def create_question(self):
-        self.data.load_quiz_data()
         if self.selected_quiz:
+            self.data.load_quiz_data()
             print('What type of Question?')
             print('(1). Exact String')
             print('(2). Exact Number')
@@ -60,7 +61,10 @@ class Game:
 
             if question_type == '2':
                 text = input('Enter question text: ')
-                correct_answer = int(input('Enter correct answer: '))
+                answer_input = input('Enter correct answer: ')
+                while not re.match(r'^[ 0-9]+$', answer_input):
+                    answer_input = input('Enter correct answer: ')
+                correct_answer = int(answer_input)
                 question = question_factory.create_numeric_question(text, correct_answer)
 
             if question_type == '3':
@@ -83,7 +87,7 @@ class Game:
 
                 question = question_factory.create_selection_question(text, correct_answer, incorrect_answers)
 
-            self.selected_quiz.add_question(question)
+            self.data.get_quiz_by_id(self.selected_quiz).add_question(question)
             self.data.save_quiz_data()
         else:
             print('(!) No Quiz selected')

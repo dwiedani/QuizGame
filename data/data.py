@@ -13,16 +13,22 @@ class Data:
 
     def set_quiz(self, new_quiz):
         for quiz in self.quiz_repository:
-            if new_quiz.title == quiz.title:
+            if new_quiz.id == quiz.id:
                 return quiz
         self.quiz_repository.append(new_quiz)
         self.save_quiz_data()
-
         return new_quiz
 
-    def get_quiz(self, title):
+    def get_quiz_by_title(self, title):
         for quiz in self.quiz_repository:
             if quiz.title == title:
+                return quiz
+        return False
+
+    def get_quiz_by_id(self, id):
+        self.load_quiz_data()
+        for quiz in self.quiz_repository:
+            if quiz.id == id:
                 return quiz
         return False
 
@@ -33,7 +39,8 @@ class Data:
     def load_quiz_data(self):
         self.quiz_repository = []
         if os.path.isfile('./data/data.json'):
-            with open('./data/data.json') as json_file:
+            file = open('./data/data.json')
+            with file as json_file:
                 json_str = json.load(json_file)
                 data = json.loads(json_str)
                 for quiz in data:
@@ -43,6 +50,9 @@ class Data:
                         question_object = question_factory.create_from_json(question)
                         quiz_object.questions.append(question_object)
                     self.quiz_repository.append(quiz_object)
+            file.close()
+            print('data loaded')
+
 
     def save_quiz_data(self):
         quiz_data = []
@@ -54,5 +64,8 @@ class Data:
             quiz['questions'] = json.dumps(question_data)
             quiz_data.append(quiz)
         data = json.dumps(quiz_data)
-        with open('./data/data.json', 'w') as outfile:
+        file = open('./data/data.json', 'w')
+        with file as outfile:
             json.dump(data, outfile)
+        file.close()
+        print('data saved')

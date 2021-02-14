@@ -8,7 +8,7 @@ if __name__ == '__main__':
     while not game_exit:
         print('*** Game-Options ***')
         if game.selected_quiz:
-            print('(1). play Quiz "' + game.selected_quiz.title + '"')
+            print('(1). play Quiz "' + game.data.get_quiz_by_id(game.selected_quiz).title + '"')
         print('(2). select Quiz')
         print('(3). create Quiz')
         print('(4). create Question / add to Quiz')
