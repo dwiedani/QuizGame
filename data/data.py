@@ -4,8 +4,14 @@ from g_objects.quiz import Quiz
 from g_objects.user import User
 import question_factory as question_factory
 
+DATA_JSON = './data/data.json'
+
+USER_JSON = './data/users.json'
+
 
 class Data:
+
+    user_file = ''
 
     def __init__(self):
         self.load_quiz_data()
@@ -33,8 +39,8 @@ class Data:
 
     def load_quiz_data(self):
         quiz_repository = []
-        if os.path.isfile('./data/data.json'):
-            file = open('./data/data.json')
+        if os.path.isfile(DATA_JSON):
+            file = open(DATA_JSON)
             with file as json_file:
                 json_str = json.load(json_file)
                 data = json.loads(json_str)
@@ -70,15 +76,15 @@ class Data:
             quiz['questions'] = json.dumps(question_data)
             quiz_data.append(quiz)
         data = json.dumps(quiz_data)
-        file = open('./data/data.json', 'w')
+        file = open(DATA_JSON, 'w')
         with file as outfile:
             json.dump(data, outfile)
         file.close()
 
     def load_user_data(self):
         user_repository = []
-        if os.path.isfile('./data/users.json'):
-            file = open('./data/users.json')
+        if os.path.isfile(USER_JSON):
+            file = open(USER_JSON)
             with file as json_file:
                 json_str = json.load(json_file)
                 data = json.loads(json_str)
@@ -105,7 +111,7 @@ class Data:
             user = user_item.__dict__
             user_data.append(user)
         data = json.dumps(user_data)
-        file = open('./data/users.json', 'w')
+        file = open(USER_JSON, 'w')
         with file as outfile:
             json.dump(data, outfile)
         file.close()

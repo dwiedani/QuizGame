@@ -41,7 +41,6 @@ class Game:
         print('(!) The Quiz: "' + self.data.get_quiz_by_id(
             self.selected_quiz).title + '" has been created and selected')
 
-        #Question creation loop
         question_count = self.number_input_filter('how many question would you like to add? (3-10):')
 
         if question_count > 10:
