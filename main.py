@@ -24,5 +24,3 @@ if __name__ == '__main__':
             game.create_question()
         elif task == '0':
             game_exit = True
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/

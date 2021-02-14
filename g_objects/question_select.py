@@ -3,12 +3,9 @@ from .question import Question
 
 
 class QuestionSelect(Question):
-    text = ''
-    correct_answer = ''
-    incorrect_answers = []
 
-    def __init__(self, text, correct_answer, incorrect_answers):
-        super().__init__(text, correct_answer)
+    def __init__(self, question_type, text, correct_answer, incorrect_answers):
+        super().__init__(question_type, text, correct_answer)
         self. incorrect_answers = incorrect_answers
 
     def ask(self):
@@ -28,6 +25,11 @@ class QuestionSelect(Question):
         return self.validate(answers[answer_input])
 
     class Builder:
+
+        def question_type(self, question_type):
+            self.question_type = question_type
+            return self
+
         def text(self, text):
             self.text = text
             return self
@@ -41,4 +43,4 @@ class QuestionSelect(Question):
             return self
 
         def build(self):
-            return QuestionSelect(self.text, self.correct_answer, self.incorrect_answers)
+            return QuestionSelect(self.question_type, self.text, self.correct_answer, self.incorrect_answers)

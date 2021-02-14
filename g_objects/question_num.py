@@ -4,9 +4,8 @@ import re
 
 class QuestionNum(Question):
 
-    def __init__(self, text, correct_answer):
-        super().__init__(text, correct_answer)
-        self.correct_answer = correct_answer
+    def __init__(self, question_type, text, correct_answer):
+        super().__init__(question_type, text, correct_answer)
 
     def ask(self):
         print(self.text)
@@ -17,8 +16,10 @@ class QuestionNum(Question):
         return self.validate(answer_input)
 
     class Builder:
-        text = ''
-        correct_answer = None
+
+        def question_type(self, question_type):
+            self.question_type = question_type
+            return self
 
         def text(self, text):
             self.text = text
@@ -29,4 +30,4 @@ class QuestionNum(Question):
             return self
 
         def build(self):
-            return QuestionNum(self.text, self.correct_answer)
+            return QuestionNum(self.question_type, self.text, self.correct_answer)

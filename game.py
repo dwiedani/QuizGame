@@ -2,6 +2,7 @@ from g_objects.quiz import Quiz
 from data.data import Data
 import question_factory as question_factory
 from copy import deepcopy
+import re
 
 
 class Game:
@@ -42,6 +43,7 @@ class Game:
             print('(!) Quiz "' + title + '" not found')
 
     def create_question(self):
+        self.data.load_quiz_data()
         if self.selected_quiz:
             print('What type of Question?')
             print('(1). Exact String')

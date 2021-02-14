@@ -1,10 +1,14 @@
 import random
-
+import uuid
 
 class Quiz:
     questions = []
 
-    def __init__(self, title):
+    def __init__(self, title, id=None):
+        if id == None:
+            self.id = str(uuid.uuid4())
+        else:
+            self.id = id
         self.title = title
         self.questions = []
 
