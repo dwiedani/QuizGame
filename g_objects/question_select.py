@@ -6,7 +6,7 @@ class QuestionSelect(Question):
 
     def __init__(self, question_type, text, correct_answer, incorrect_answers):
         super().__init__(question_type, text, correct_answer)
-        self. incorrect_answers = incorrect_answers
+        self.incorrect_answers = incorrect_answers
 
     def ask(self):
         answers = self.incorrect_answers

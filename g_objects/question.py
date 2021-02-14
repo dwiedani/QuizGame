@@ -1,11 +1,10 @@
 import uuid
+
+
 class Question:
 
-    def __init__(self, question_type, text, correct_answer, id=None):
-        if id == None:
-            self.id = str(uuid.uuid4())
-        else:
-            self.id = id
+    def __init__(self, question_type, text, correct_answer, id=str(uuid.uuid4())):
+        self.id = id
         self.text = text
         self.question_type = question_type
         self.correct_answer = correct_answer

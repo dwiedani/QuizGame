@@ -1,4 +1,5 @@
 from g_objects.quiz import Quiz
+from g_objects.user import User
 from data.data import Data
 import question_factory as question_factory
 import re
@@ -24,6 +25,7 @@ class Game:
     selected_quiz = None
     data = Data()
     current_user = None
+    session_user = User('unregistered', '')
 
     def play_quiz(self):
         if self.selected_quiz:
@@ -35,22 +37,38 @@ class Game:
                     if self.current_user:
                         self.current_user.correct_answer()
                         self.data.save_user(self.current_user)
+                    else:
+                        self.session_user.correct_answer()
                 else:
                     print('incorrect!')
                 if self.current_user:
                     self.current_user.question()
                     self.data.save_user(self.current_user)
+                else:
+                    self.session_user.question()
             if self.current_user:
                 self.current_user.quiz_played()
                 self.data.save_user(self.current_user)
+            else:
+                self.session_user.quiz_played()
             print('(!) Quiz "' + current_quiz.title + '" finished')
         else:
             print('(!) No Quiz selected')
 
     def create_quiz(self):
-        print('Type Quiz title:')
-        title = input()
-        quiz = Quiz(title)
+        title = input('Type Quiz title:')
+        print('select quiz type')
+        print('(1) public')
+        print('(2) private')
+        public_selection = number_input_filter('select option: ')
+
+        if public_selection == 1:
+            is_public = True
+        else:
+            is_public = False
+
+        quiz = Quiz(title, self.current_user.id, is_public)
+
         self.data.save_quiz(quiz)
         self.selected_quiz = quiz.id
         print('(!) The Quiz: "' + self.data.get_quiz_by_id(
@@ -68,6 +86,7 @@ class Game:
         for i in range(question_count):
             self.create_question()
 
+
     def select_quiz(self):
         print('Select a Quiz:')
         self.print_quiz_list()
@@ -83,6 +102,7 @@ class Game:
             print('(!) Multiple quizzes with title:"' + quizzes[0].title + '" found')
             self.print_quiz_list_indexed(quizzes)
             index = number_input_filter('select a quiz: ')
+
         if 0 <= index < len(quizzes):
             self.selected_quiz = quizzes[index].id
             if self.selected_quiz:
@@ -91,13 +111,20 @@ class Game:
 
     def print_quiz_list(self, quiz_data=None):
         if not quiz_data:
-            quiz_data = self.data.get_all_quizes()
+            if self.current_user:
+                quiz_data = self.data.get_quizes_by_user_id(self.current_user.id)
+            else:
+                quiz_data = self.data.get_public_quizes()
+
         for quiz in quiz_data:
             print('(' + quiz.title + ') questions:' + str(len(quiz.questions)))
 
     def print_quiz_list_indexed(self, quiz_data=None):
         if not quiz_data:
-            quiz_data = self.data.get_all_quizes()
+            if self.current_user:
+                quiz_data = self.data.get_all_quizes()
+            else:
+                quiz_data = self.data.get_public_quizes()
         index = 0
         for quiz in quiz_data:
             print('(' + str(index) + ')' + quiz.title + ' questions: ' + str(len(quiz.questions)))
@@ -153,9 +180,12 @@ class Game:
     def show_user_statistics(self):
         if self.current_user:
             stats = self.current_user.stats()
-            print('Played quizzes: ' + str(stats['played']))
-            print('Answered Questions: ' + str(stats['questions']))
-            print('Correct Answers: ' + str(stats['correct_answers']))
+        else:
+            stats = self.session_user.stats()
+        print('Played quizzes: ' + str(stats['played']))
+        print('Answered Questions: ' + str(stats['questions']))
+        print('Correct Answers: ' + str(stats['correct_answers']))
+
 
     def login(self):
         username = input('username:')

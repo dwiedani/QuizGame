@@ -16,6 +16,24 @@ class Data:
     def get_all_quizes(self):
         return self.db.load_quiz_data()
 
+    def get_quizes_by_user_id(self, user_id):
+        quiz_data = self.db.load_quiz_data()
+        quizes = []
+        for quiz in quiz_data:
+            if quiz.is_public:
+                quizes.append(quiz)
+            elif quiz.user_id == user_id:
+                quizes.append(quiz)
+        return quizes
+
+    def get_public_quizes(self):
+        quiz_data = self.db.load_quiz_data()
+        public_quizes = []
+        for quiz in quiz_data:
+            if quiz.is_public:
+                public_quizes.append(quiz)
+        return public_quizes
+
     def get_quiz_by_title(self, title):
         quiz_repository = self.db.load_quiz_data()
         result = []

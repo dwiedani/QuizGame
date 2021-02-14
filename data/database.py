@@ -22,7 +22,7 @@ class Database:
                 json_str = json.load(json_file)
                 data = json.loads(json_str)
                 for quiz in data:
-                    quiz_object = Quiz(quiz['title'], quiz['id'])
+                    quiz_object = Quiz(quiz['title'], quiz['user_id'], quiz['is_public'], quiz['id'])
                     questions = json.loads(quiz['questions'])
                     for question in questions:
                         question_object = question_factory.create_from_json(question)
