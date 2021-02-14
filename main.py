@@ -34,8 +34,7 @@ if __name__ == '__main__':
                 game.create_question()
         if task == '5':
             if game.current_user:
-                stats = game.current_user.stats()
-                print(stats)
+                stats = game.show_user_statistics()
         if task == '6':
             user = game.login()
         if task == '7':

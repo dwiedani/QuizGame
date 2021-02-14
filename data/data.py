@@ -18,10 +18,11 @@ class Data:
 
     def get_quiz_by_title(self, title):
         quiz_repository = self.load_quiz_data()
+        result = []
         for quiz in quiz_repository:
             if quiz.title == title:
-                return quiz
-        return False
+                result.append(quiz)
+        return result
 
     def get_quiz_by_id(self, id):
         quiz_repository = self.load_quiz_data()
@@ -29,11 +30,6 @@ class Data:
             if quiz.id == id:
                 return quiz
         return False
-
-    def print_quiz_list(self):
-        quiz_repository = self.load_quiz_data()
-        for quiz in quiz_repository:
-            print('(' + quiz.title + ') questions:' + str(len(quiz.questions)))
 
     def load_quiz_data(self):
         quiz_repository = []
