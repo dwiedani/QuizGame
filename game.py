@@ -185,6 +185,7 @@ class Game:
         print('Played quizzes: ' + str(stats['played']))
         print('Answered Questions: ' + str(stats['questions']))
         print('Correct Answers: ' + str(stats['correct_answers']))
+        print('Quota: ' + str( round(stats['correct_answers']/stats['questions'] * 100,2)) + '%')
 
 
     def login(self):
